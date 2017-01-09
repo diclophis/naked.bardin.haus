@@ -1,0 +1,93 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: naked-bardin-haus-app
+  labels:
+    ttl: '16'
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    name: naked
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: naked-bardin-haus-vhost
+  labels:
+    ttl: '16'
+spec:
+  rules:
+  - host: bardin.haus
+    http:
+      paths:
+      - backend:
+          serviceName: naked-bardin-haus-app
+          servicePort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: foo
+  labels:
+    ttl: '16'
+spec:
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: naked
+        ttl: '16'
+    spec:
+      containers:
+      - name: naked-bardin-haus-app
+        image: docker.repo.mvn.link/bigmaven:1234
+        #readinessProbe:
+        #  httpGet:
+        #    port: 8080
+        #    path: "/"
+        #    scheme: HTTP
+        #    httpHeaders:
+        #    - name: X-Forwarded-Proto
+        #      value: https
+        #  initialDelaySeconds: 40
+        #  timeoutSeconds: 30
+        #  periodSeconds: 6
+        #  successThreshold: 4
+        #  failureThreshold: 12
+        #livenessProbe:
+        #  httpGet:
+        #    port: 3001
+        #    path: "/status"
+        #    scheme: HTTP
+        #    httpHeaders:
+        #    - name: X-Forwarded-Proto
+        #      value: https
+        #  initialDelaySeconds: 40
+        #  timeoutSeconds: 30
+        #  periodSeconds: 6
+        #  successThreshold: 1
+        #  failureThreshold: 12
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 20m
+        command:
+        - "bundle"
+        - "exec"
+        - "rackup"
+        - "-p"
+        - "8080"
+        env: &1
+        - name: APP_ENV
+          value: production
