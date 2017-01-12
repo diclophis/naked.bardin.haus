@@ -1,9 +1,9 @@
 # Makefile for besoked installation
 
 #NOTE: override these at execution time
-REPO ?= docker.io/
+REPO ?= localhost/
 IMAGE_NAME ?= naked
-IMAGE_TAG ?= $(strip $(shell find Gemfile Gemfile.lock config.ru index.html -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
+IMAGE_TAG ?= $(strip $(shell find Gemfile Gemfile.lock config.ru public/ -type f | xargs shasum | sort | shasum | cut -f1 -d" "))
 IMAGE = $(REPO)$(IMAGE_NAME):$(IMAGE_TAG)
 
 BUILD=build

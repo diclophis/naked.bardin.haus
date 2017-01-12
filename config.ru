@@ -1,9 +1,12 @@
+# vintage handwritten html
 
-use Rack::Static,
+use Rack::Static, {
   :urls => [
-    "/index.html"
+    "/index.html",
+    "/favicon.ico"
   ],
-  :root => "."
+  :root => "public"
+}
 
 run lambda { |env|
   [
