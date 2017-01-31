@@ -90,6 +90,8 @@ spec:
         - "0.0.0.0"
         - "-p"
         - "8080"
+        - "-s"
+        - "bespoked"
         env: &1
         - name: APP_ENV
           value: production

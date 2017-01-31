@@ -1,4 +1,11 @@
-# vintage handwritten html
+# vintage handwritten html, served up staticly
+
+require 'rubygems'
+
+Bundler.require
+
+require 'bespoked'
+require 'bespoked/rack_handler'
 
 use Rack::Static, {
   :urls => [
