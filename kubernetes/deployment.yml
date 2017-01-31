@@ -31,7 +31,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: foo
+  name: naked
   labels:
     ttl: '16'
 spec:
