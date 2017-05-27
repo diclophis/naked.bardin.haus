@@ -10,6 +10,7 @@ Bundler.require
 use Rack::Static, {
   :urls => [
     "/index.html",
+    "/scroll-x.html",
     "/favicon.ico"
   ],
   :root => "public"
