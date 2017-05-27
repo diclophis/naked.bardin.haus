@@ -1,108 +1,100 @@
 <html>
   <head>
+    <meta charset="utf-8" />
     <style>
-			.hide-scroll {
-				overflow: hidden;
-			}
-
-      .timeline-container {
-				position: absolute;
-				height: 100%;
-				top: 0;
-				bottom: 0;
-				width: auto;
-				left: 0;
-				right: 0;
-				overflow: auto;
-				background-color: blue;
-				padding-bottom: 10%;
+      * {
+        height: 100%;
       }
 
-			.cursor {
+      body {
+        margin: 0;
+        padding: 0;
+        font-size: xx-large;
+        color: white;
+      }
+
+      img {
+        width: auto;
+      }
+
+      .timeline-container {
+        margin: 0;
+        padding: 0;
 				position: absolute;
-				left: 0%;
-				top: 0%;
-				width: 10em;
-				height: 100%;
-				background-color: purple;
-			}
+				width: 100%;
+				overflow: auto;
+				background-color: blue;
+      }
 
       .timeline {
+        margin: 0;
+        padding: 0;
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
-        height: 40%;
 				background-color: red;
       }
+
+			.cursor {
+        margin: 0;
+        padding: 0;
+				position: absolute;
+				left: 0%;
+				top: 0%;
+				width: 77%;
+        text-align: center;
+				background-color: purple;
+			}
     </style>
   </head>
   <body>
-		<div class="hide-scroll">
-			<div class="timeline-container">
-				<div class="timeline">
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-					<div class="cursor">
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="timeline-container">
+      <div class="timeline">
+      </div>
+    </div>
     <script>
       var timelineContainer = document.getElementsByClassName("timeline-container")[0];
       var timeline = document.getElementsByClassName("timeline")[0];
-      var cursors = document.getElementsByClassName("cursor");
-			var cursorsCount = cursors.length;
+			var cursorsCount = 7;
+      var cursor = null;
+      var img = null;
 
-			var cW = timelineContainer.offsetWidth;
-			var cH = timelineContainer.offsetHeight;
-			var iW = cursors[0].offsetWidth;
-			var iH = cursors[0].offsetHeight;
+      for (var i=0; i<cursorsCount; i++) {
+        cursor = document.createElement('div')
+        img = document.createElement("img");
+        img.src = "https://webdav.bardin.haus/incoming/c2b34bbd-3fb0-4fcb-b9ed-0ed905a38003"
+        cursor.appendChild(img);
+        
+        cursor.className = "cursor";
+        timeline.appendChild(cursor);
+      }
+
+      var cursors = document.getElementsByClassName("cursor");
+
+			var cW = timelineContainer.offsetWidth * 1.0;
+			var cH = timelineContainer.offsetHeight * 1.0;
+			var iW = cursors[0].offsetWidth * 1.0;
+			var iH = cursors[0].offsetHeight * 1.0;
 			var halfcW = (cW * 1.5);
 
-  		timeline.style.width = cW * 10;
+  		//timeline.style.width = cW * 10;
 
-      timelineContainer.addEventListener('scroll', function(ev) {
-				var increased = (timelineContainer.scrollLeft > (timeline.offsetWidth - (halfcW)));
-				var decreased = (timelineContainer.scrollLeft < (timeline.offsetWidth - (halfcW * 0.25)));
+      var doScroll = function(ev, delta) {
+				//var increased = (timelineContainer.scrollLeft > (timeline.offsetWidth - (halfcW)));
+				//var decreased = false; //TODO: (timelineContainer.scrollRight < (timeline.offsetWidth - (halfcW * 0.25)));
+
         //console.log(timelineContainer.scrollLeft, timeline.offsetWidth, timeline.offsetWidth - (cW * 1.5), increased);
 
+        timelineContainer.scrollLeft += (delta * 10);
+
 				for (var i=0; i<cursorsCount; i++) {
-					var nl = ((Math.floor(timelineContainer.scrollLeft / iW) + (i - 2)) * iW);
-					cursors[i].style.left = nl;
-					cursors[i].innerText = (nl / iW);
+					var nl = ((Math.floor(timelineContainer.scrollLeft / iW) + (i - Math.floor(cursorsCount/2))) * iW);
+					cursors[i].style.left = (nl + (0));
+					//cursors[i].innerText = (nl / iW);
 				}
 
+        /*
 				if (increased) {
 					timeline.style.width = timeline.offsetWidth + (halfcW);
 				}
@@ -110,7 +102,25 @@
 				if (decreased) {
 					timeline.style.width = timeline.offsetWidth - (halfcW);
 				}
-      });
+        */
+
+        timeline.style.width = timelineContainer.offsetRight + (cW * 0.25);
+      };
+
+      //timelineContainer.addEventListener('wheel', function(ev) {
+      //  doScroll(ev, ev.deltaY);
+      //});
+
+      //timelineContainer.addEventListener('scroll', function(ev) {
+      //  doScroll(ev, 0);
+      //});
+
+      var foop = function(ev) {
+        doScroll(ev, 0);
+        window.requestAnimationFrame(foop);
+      };
+
+      foop(null);
     </script>
   </body>
 </html>
