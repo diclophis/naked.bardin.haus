@@ -4,8 +4,8 @@ require 'rubygems'
 
 Bundler.require
 
-require 'bespoked'
-require 'bespoked/rack_handler'
+#require 'bespoked'
+#require 'bespoked/rack_handler'
 
 use Rack::Static, {
   :urls => [

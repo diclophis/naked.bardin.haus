@@ -91,7 +91,7 @@ spec:
         - "-p"
         - "8080"
         - "-s"
-        - "bespoked"
+        - "puma"
         env: &1
         - name: APP_ENV
           value: production
