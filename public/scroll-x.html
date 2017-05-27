@@ -3,37 +3,23 @@
     <meta charset="utf-8" />
     <style>
       * {
-        height: 100%;
+        width: 100%;
       }
 
       body {
         margin: 0;
         padding: 0;
-        font-size: xx-large;
-        color: white;
       }
 
       img {
-        width: auto;
+        margin: 0 0 2em 0;
+				width: 33em;
       }
 
       .timeline-container {
-        margin: 0;
-        padding: 0;
-				position: absolute;
-				width: 100%;
-				overflow: auto;
-				background-color: blue;
       }
 
       .timeline {
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-				background-color: red;
       }
 
 			.cursor {
@@ -42,9 +28,8 @@
 				position: absolute;
 				left: 0%;
 				top: 0%;
-				width: 77%;
+
         text-align: center;
-				background-color: purple;
 			}
     </style>
   </head>
@@ -56,7 +41,7 @@
     <script>
       var timelineContainer = document.getElementsByClassName("timeline-container")[0];
       var timeline = document.getElementsByClassName("timeline")[0];
-			var cursorsCount = 7;
+			var cursorsCount = 15;
       var cursor = null;
       var img = null;
 
@@ -78,42 +63,14 @@
 			var iH = cursors[0].offsetHeight * 1.0;
 			var halfcW = (cW * 1.5);
 
-  		//timeline.style.width = cW * 10;
-
       var doScroll = function(ev, delta) {
-				//var increased = (timelineContainer.scrollLeft > (timeline.offsetWidth - (halfcW)));
-				//var decreased = false; //TODO: (timelineContainer.scrollRight < (timeline.offsetWidth - (halfcW * 0.25)));
-
-        //console.log(timelineContainer.scrollLeft, timeline.offsetWidth, timeline.offsetWidth - (cW * 1.5), increased);
-
-        timelineContainer.scrollLeft += (delta * 10);
-
 				for (var i=0; i<cursorsCount; i++) {
-					var nl = ((Math.floor(timelineContainer.scrollLeft / iW) + (i - Math.floor(cursorsCount/2))) * iW);
-					cursors[i].style.left = (nl + (0));
-					//cursors[i].innerText = (nl / iW);
+					var nl = ((Math.floor(document.body.scrollTop / iH) + (i + 3 - Math.floor(cursorsCount/2))) * iH); // + (i - Math.floor(cursorsCount/2))) * iH);
+					cursors[i].style.top = (nl + (0));
 				}
 
-        /*
-				if (increased) {
-					timeline.style.width = timeline.offsetWidth + (halfcW);
-				}
-
-				if (decreased) {
-					timeline.style.width = timeline.offsetWidth - (halfcW);
-				}
-        */
-
-        timeline.style.width = timelineContainer.offsetRight + (cW * 0.25);
+        document.body.height = cursors[cursorsCount-1].offsetBottom; //document.body.scrollHeight + (cH * 1.25);
       };
-
-      //timelineContainer.addEventListener('wheel', function(ev) {
-      //  doScroll(ev, ev.deltaY);
-      //});
-
-      //timelineContainer.addEventListener('scroll', function(ev) {
-      //  doScroll(ev, 0);
-      //});
 
       var foop = function(ev) {
         doScroll(ev, 0);
