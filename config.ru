@@ -1,9 +1,10 @@
 
 use Rack::Static,
   :urls => [
-    "/index.html"
+    "/index.html",
+    "/scroll-x.html"
   ],
-  :root => "."
+  :root => "public"
 
 run lambda { |env|
   [
