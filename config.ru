@@ -1,10 +1,20 @@
+# vintage handwritten html, served up staticly
 
-use Rack::Static,
+require 'rubygems'
+
+Bundler.require
+
+require 'bespoked'
+require 'bespoked/rack_handler'
+
+use Rack::Static, {
   :urls => [
     "/index.html",
-    "/scroll-x.html"
+    "/scroll-x.html",
+    "/favicon.ico"
   ],
   :root => "public"
+}
 
 run lambda { |env|
   [

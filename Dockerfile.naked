@@ -1,0 +1,10 @@
+FROM alpine:3.4
+RUN apk update && apk upgrade && apk add openssl openssl-dev build-base ruby ruby-dev ruby-irb ruby-bundler nginx libffi-dev libuv libuv-dev git python
+RUN adduser -D -h /home/app -s /bin/bash app
+ADD Gemfile* /home/app/
+WORKDIR /home/app
+RUN chown -R app. /home/app
+USER app
+RUN bundle install --force --path=vendor/bundle --jobs=4 --retry=3 --deployment
+ADD . /home/app
+CMD ["bundle", "exec", "rackup", "-h"]
