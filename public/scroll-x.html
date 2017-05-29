@@ -2,24 +2,9 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      * {
-        width: 100%;
-      }
-
       body {
         margin: 0;
         padding: 0;
-      }
-
-      img {
-        margin: 0 0 2em 0;
-				width: 33em;
-      }
-
-      .timeline-container {
-      }
-
-      .timeline {
       }
 
 			.cursor {
@@ -29,7 +14,17 @@
 				left: 0%;
 				top: 0%;
 
+				min-width: 40em;
+        min-height: 30em;
+        max-height: 30em;
+        width: 100%;
+
         text-align: center;
+			}
+
+			img {
+				max-width: 100%;
+        max-height: 30em;
 			}
     </style>
   </head>
@@ -41,16 +36,30 @@
     <script>
       var timelineContainer = document.getElementsByClassName("timeline-container")[0];
       var timeline = document.getElementsByClassName("timeline")[0];
-			var cursorsCount = 15;
+      var cursorsCount = 21;
+      var maxVisibleImg = 7;
       var cursor = null;
       var img = null;
+
+      var imgs = [
+          "https://webdav.bardin.haus/incoming/P5270182.jpg",
+          "https://webdav.bardin.haus/incoming/P5270187.jpg"
+      ];
+
+      /*
+      var imgs = [];
+      for (var i=0; i<100; i++) {
+        imgs.push("https://source.unsplash.com/random?" + i)
+      };
+      */
 
       for (var i=0; i<cursorsCount; i++) {
         cursor = document.createElement('div')
         img = document.createElement("img");
-        img.src = "https://webdav.bardin.haus/incoming/c2b34bbd-3fb0-4fcb-b9ed-0ed905a38003"
+        if (i < maxVisibleImg) {
+          img.src = imgs[(i) % imgs.length];
+        }
         cursor.appendChild(img);
-        
         cursor.className = "cursor";
         timeline.appendChild(cursor);
       }
@@ -62,22 +71,32 @@
 			var iW = cursors[0].offsetWidth * 1.0;
 			var iH = cursors[0].offsetHeight * 1.0;
 			var halfcW = (cW * 1.5);
+			var lastScrollTop = -1;
+      var dip = 0; //(Math.floor(cursorsCount/2)) - 2;
 
-      var doScroll = function(ev, delta) {
-				for (var i=0; i<cursorsCount; i++) {
-					var nl = ((Math.floor(document.body.scrollTop / iH) + (i + 3 - Math.floor(cursorsCount/2))) * iH); // + (i - Math.floor(cursorsCount/2))) * iH);
-					cursors[i].style.top = (nl + (0));
+			var updateScrollIndex = function(ev, delta) {
+				if (document.body.scrollTop != lastScrollTop) {
+					lastScrollTop = document.body.scrollTop;
+          var scrollIndex = Math.floor(document.body.scrollTop / iH);
+
+					for (var i=0; i<cursorsCount; i++) {
+						var nl = ((scrollIndex + i - dip) * iH);
+            if (cursors[i].style.top != nl) {
+              cursors[i].style.top = (nl);
+              if (i < maxVisibleImg) {
+                cursors[i].firstChild.src = imgs[(scrollIndex + i) % imgs.length];
+              }
+            }
+					}
 				}
-
-        document.body.height = cursors[cursorsCount-1].offsetBottom; //document.body.scrollHeight + (cH * 1.25);
       };
 
-      var foop = function(ev) {
-        doScroll(ev, 0);
-        window.requestAnimationFrame(foop);
+      var animate = function(ev) {
+        updateScrollIndex(ev, 0);
+        window.requestAnimationFrame(animate);
       };
 
-      foop(null);
+      animate(null);
     </script>
   </body>
 </html>
