@@ -4,17 +4,7 @@ require 'rubygems'
 
 Bundler.require
 
-#require 'bespoked'
-#require 'bespoked/rack_handler'
-
-use Rack::Static, {
-  :urls => [
-    "/index.html",
-    "/scroll-x.html",
-    "/favicon.ico"
-  ],
-  :root => "public"
-}
+use Rack::Static, { :urls => [""], :root => 'public', :index => 'index.html' }
 
 run lambda { |env|
   [

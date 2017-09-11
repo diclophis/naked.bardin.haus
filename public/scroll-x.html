@@ -2,6 +2,12 @@
   <head>
     <meta charset="utf-8" />
     <style>
+      * {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        overflow-x: hidden;
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -20,7 +26,11 @@
         width: 100%;
 
         text-align: center;
+
 			}
+
+      .timeline {
+      }
 
 			img {
 				max-width: 100%;
@@ -41,10 +51,25 @@
       var cursor = null;
       var img = null;
 
+      /*
       var imgs = [
           "https://webdav.bardin.haus/incoming/P5270182.jpg",
           "https://webdav.bardin.haus/incoming/P5270187.jpg"
       ];
+      */
+
+
+var imgs = [
+"http://webdav.bardin.haus/incoming/01.jpg",
+"http://webdav.bardin.haus/incoming/02.jpg",
+"http://webdav.bardin.haus/incoming/03.jpg",
+"http://webdav.bardin.haus/incoming/04.jpg",
+"http://webdav.bardin.haus/incoming/05.jpg",
+"http://webdav.bardin.haus/incoming/06.jpg",
+"http://webdav.bardin.haus/incoming/07.jpg",
+"http://webdav.bardin.haus/incoming/08.jpg",
+"http://webdav.bardin.haus/incoming/09.jpg"
+];
 
       /*
       var imgs = [];
@@ -57,7 +82,7 @@
         cursor = document.createElement('div')
         img = document.createElement("img");
         if (i < maxVisibleImg) {
-          img.src = imgs[(i) % imgs.length];
+          img.alt = img.src = imgs[(i) % imgs.length];
         }
         cursor.appendChild(img);
         cursor.className = "cursor";
@@ -84,7 +109,7 @@
             if (cursors[i].style.top != nl) {
               cursors[i].style.top = (nl);
               if (i < maxVisibleImg) {
-                cursors[i].firstChild.src = imgs[(scrollIndex + i) % imgs.length];
+                cursors[i].firstChild.alt = cursors[i].firstChild.src = imgs[(scrollIndex + i) % imgs.length];
               }
             }
 					}
