@@ -2,29 +2,37 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: naked-bardin-haus-app
+  annotations:
+  name: naked-service
 spec:
-  type: ClusterIP
+  externalTrafficPolicy: Cluster
   ports:
-  - port: 8080
+  - name: app
+    nodePort: 31047
+    port: 8080
     protocol: TCP
+    targetPort: 8080
   selector:
     name: naked
+  sessionAffinity: None
+  type: NodePort
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: naked-bardin-haus-vhost
+  annotations:
+    ingress.class: wkndr
 spec:
   rules:
-  - host: bardin.haus
+  - host: naked.bardin.haus
     http:
       paths:
       - backend:
-          serviceName: naked-bardin-haus-app
+          serviceName: naked-service
           servicePort: 8080
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: naked
@@ -34,6 +42,9 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 0
+  selector:
+    matchLabels:
+      name: naked
   replicas: 1
   template:
     metadata:
@@ -42,7 +53,8 @@ spec:
     spec:
       containers:
       - name: naked-bardin-haus-app
-        image: docker.repo.mvn.link/bigmaven:1234
+        image: naked.bardin.haus-naked:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
         command:
